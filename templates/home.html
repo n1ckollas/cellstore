@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load staticfiles %}
+
+
+{% block head_title %}Welcome | {{ block.super }}{% endblock %}
+
+<style>
+{% block style %}
+.navbar-static-top {
+	margin-bottom: 0px !important;
+}
+
+.jumbotron {
+	background-color:#0E3D14;
+	color: #FFF;
+	{% if featured_image.make_image_background %}
+		background-image:url("{{featured_image.image.url}}");
+		background-repeat: no-repeat;
+		background-size:cover;
+	{% endif %}
+
+	{% if featured_image.text_css %}
+		color:#{{featured_image.text_css}};
+	{% endif %}
+}
+
+{% endblock %}
+</style>
+
+
+     
+{% block jumbotron %}
+{% if featured_image %}
+	<div class="jumbotron">
+		<div class="container">
+			<div class="row">
+				<div class='col-sm-6 {% if featured_image.text_right %} pull-right {% endif %}'>
+					<h1>{{featured_image.product.title}}</h1>
+					<p>{{featured_image.text}}</p>
+					<p>
+						<a class="btn btn-lg btn-primary" href="{{featured_image.product.get_absolute_url}}" role="button">Che it Out ...</a>
+					</p>
+					<br>
+					<br>
+					<br>
+					<br>
+				</div>
+				{% if not featured_image.make_image_background %}
+				<div class='col-sm-6' >
+					<img src="{{featured_image.image.url}}" class = "img-responsive">
+		 		</div>
+		 		{% endif %}
+			</div>
+		</div>
+	 </div>
+{% else %}
+	<div class="jumbotron">
+	 <div class="container">
+		<div class="row">
+			<div class='col-sm-6'>
+			<h1>Django Cell Store</h1>
+			<p>Django Cell Store is a tutorial project to explore capabilities of python framework "Django". In this projects we are exploring how models work, what kind of model relations there are in django. Class based views and their built in methods vs function based views. The Layout of Model View Controller Architecture. Bootstrap framework. Django Admin panel, and model registration in django admin.</p>
+			<p>
+			<a class="btn btn-lg btn-primary" href="" role="button"> GitHub &raquo;</a>
+			</p>
+			</div>
+			<div class='col-sm-6' >
+				
+	 		</div>
+			</div>
+		</div>
+	 </div>
+{% endif %}
+{% endblock %}
+
+
+
+
+{% block content %}
+	<div class="row">
+		<h1>Recomended Products</h1>
+	{% include "products/products.html" with object_list=products col_class_set="col-sm-2" %}
+	</div>
+	<div class="row">
+		<h1>Featured Products</h1>
+	{% include "products/products.html" with object_list=products2 %}
+	</div>
+{% endblock %}

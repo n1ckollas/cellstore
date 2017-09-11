@@ -1,0 +1,35 @@
+{% load staticfiles %}
+<!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="https://js.braintreegateway.com/js/braintree-2.30.0.min.js"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>    
+    <script src="{% static 'js/responsiveslides.min.js' %}"></script>
+    <script src="{% static 'js/custom.js' %}"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="{% static 'js/ie10-viewport-bug-workaround.js' %}"></script>
+
+
+    <script type="text/javascript">
+    function updateCartItemCount(){
+    	var badge = $("#cart-count-badge")
+    	$.ajax({
+    		url: '{% url "item_count" %}',
+    		type: 'GET',
+    		success: function(data){
+    			badge.text(data.count)
+    			// console.log(data.count)
+    		},
+    		error: function(response, error){
+    			// console.log(response.responseText)
+    			// console.log(response)
+    			// console.log(error)
+    		}
+    	});
+    }
+    jQuery(document).ready(function($) {
+    	updateCartItemCount()
+    });
+    </script>

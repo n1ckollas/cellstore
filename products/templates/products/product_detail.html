@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+
+<script>
+{% block jq %}
+
+function setPrice(){
+	var price = $(".variation_select option:selected").attr('data-price')
+
+	var sale_price = $(".variation_select option:selected").attr('data-sale-price')
+	if (sale_price != '' && sale_price != 'None' && sale_price != null){
+			$('#price').html("<h3>" + sale_price + " <small class='og-price'>" + price + "</small></h3>");
+	} else{
+		$('#price').html(price);
+	}
+}
+setPrice()
+
+$('.variation_select').change(function(){
+	setPrice()
+});
+
+$(function () {
+  // Slideshow 2
+  $("#slider1").responsiveSlides({
+    auto: false,
+    pager: true,
+    nav: true,
+    speed: 500,
+    maxwidth: 800,
+    namespace: "large-btns"
+  });
+});
+
+$('#submit-btn').click(function(event) {
+	/* Act on the event */
+	event.preventDefault();
+	var formData = $('#add-form').serialize();
+	// console.log(formData);
+	$.ajax({
+		url: '{% url "cart" %}',
+		type: 'GET', 
+		data: formData,
+		success: function(data){
+			showFlashMessage(data.flash_message);
+			updateCartItemCount();
+		},
+		error: function(responce, error) {
+			// console.log(responce)
+			// console.log(error)
+			$("#add-form").submit();
+		},
+	})
+});
+{% endblock %}
+</script>
+
+
+
+{% block content %}
+	<div class="row">
+		<div class="col-sm-8">
+			<h2>{{object.title}}</h2>
+			{% if object.get_image_url %}
+			<div class="container-slider">
+				<ul class="rslides centered-btns centered-btns1" id="slider1" style="max-width: 800px;">
+					{% for img in object.productimage_set.all %}
+		        	<li id="centered-btns1_s0" class="centered-btns1_on">
+		        		<img src="{{ img.image.url }}" alt="Product image">
+		         </li>
+		      	{% endfor %}
+	      	</ul>
+      	</div>				
+			{% endif %}
+			<p class="description">{{ object.description }}</p>
+		</div>
+		<div class="col-sm-4">
+			{% if object.variation_set.count > 0 %}
+			<h3 id="price">{{object.variation_set.first.price }}</h3>
+			<form id="add-form" method="GET" action="{% url 'cart' %}">
+				<p id="jquery-message" class="lead"></p>
+				<select name="item" class="form-control variation_select">
+				{% for var_obj in object.variation_set.all %}
+					<option data-sale-price="{{ var_obj.sale_price }}" 
+									data-price="{{ var_obj.price }}" 
+									value ="{{var_obj.id}}">{{var_obj}}
+					</option>
+				{% endfor %}
+				</select>
+			{% else %}
+				<input type="hidden" name="item" value="{{object.variation_set.first.price }}">
+				<h3 id="price">{% if object.variation_set.first.sale_price %}
+					{{object.variation_set.first.sale_price }}
+					<small class="og-price">{{object.variation_set.first.price }}</small>
+					{% else %}
+						{{object.variation_set.first.price }}
+					{% endif %}
+				</h3>
+			{% endif %}
+				<br>
+				<input class="form-control" type="number" name="qty" value = '1'>
+				<br>
+				<input id="submit-btn" type="submit" value="Add to Cart"  class="btn btn-primary">
+			</form>
+			</br>
+			<hr>
+			<p>
+				<a href="https://www.facebook.com/sharer/sharer.php?u={{request.build_absolute_uri}}">
+					<i class="fa fa-facebook-square fa-3x" aria-hidden="true"></i>
+				</a>
+			</p>	
+			<hr>
+				<h3>Categories</h3>
+				<table class="table">
+				{% for cat in object.categories.all %}
+				<tr>
+				<td><a href="{{cat.get_absolute_url}}">{{cat.title}}</a></td>
+				</tr>
+				{% endfor %}
+				</table>
+				<hr>
+				<h3>Related Products</h3>
+				<div class="row">
+				{% for product in related %}
+				  <div class="col-xs-6">
+				     {% include "products/product_thumbnail.html" with product=product price="True" %}
+				  </div>
+				  {% cycle '' '</div><div class="row">' %}
+				{% endfor %} 
+			</div>
+		</div>
+	</div>
+{% endblock %}

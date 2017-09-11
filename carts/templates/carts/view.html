@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+
+<script type="text/javascript">
+{% block jq %}
+
+$('.item-qty').change(function(event) {
+	/* Act on the event */
+	var item = $(this).prev("input[type='hidden'").val();
+	var qty = $(this).val();
+	var data = {
+		item:item,
+		qty:qty,
+	}
+	console.log(data);
+	$.ajax({
+		url: '{% url "cart" %}',
+		type: 'GET',
+		data: data,
+		success: function(data){
+			$('#jquery-message').text("Added "+ data.item_added +". Deleted "+ data.deleted);
+			if (data.deleted){
+				$('#item-'+item).fadeOut();
+				$('#subtotal').text("Subtotal: "+ data.sub_total);
+				$('#tax_total').text(data.tax_total);
+				$('#cart_total').text(data.cart_total);
+
+			}else{
+				$('#item-line-total-'+item).text(data.line_total);
+				$('#subtotal').text(data.sub_total);
+				$('#tax_total').text(data.tax_total);
+				$('#cart_total').text(data.cart_total);
+			}
+			
+			showFlashMessage(data.flash_message)
+			updateCartItemCount()
+
+
+		},
+		error: function(responce, error) {
+			// console.log(responce)
+			// console.log(error)
+			$("#add-form").submit();
+		}
+	})
+});
+{% endblock %}
+</script>
+
+
+{% block content %}
+
+{% if object.cartitem_set.count < 1 %}
+    <div class="col-sm-6 col-sm-offset-3 text-center">
+    	<h1>Your cart is empty</h1>
+    </div>
+{% else %}
+<div class="col-sm-8 col-sm-offset-2">
+	<h1>Your cart:</h1>
+<table class="table">
+{% for item in object.cartitem_set.all %}
+<tr id='item-{{item.item.id}}'>
+
+<td>{{item.item.get_title}}</td>
+
+<td>
+	<form action="." method="GET">
+	<input type="hidden" name="item" value="{{item.item.id}}">
+	<input type="number" name="qty" class="item-qty" value="{{item.quantity}}">
+	<input type="submit" class="btn-update btn btn-link" value="update item" style="display:none;">
+	</form>
+</td>
+<td id='item-line-total-{{item.item.id}}'>{{item.line_item_total}}</td>
+<td class='text-right'><a href="{{item.remove}}">X</a></td>
+
+</tr>
+{% endfor %}
+<tr>
+<td colspan="4" class="text-right">Subtotal: <span id="subtotal"> {{object.subtotal}}</span> </td>
+</tr><tr>
+<td colspan="4" class="text-right">Total Tax: <span id="tax_total">{{object.tax_total}} </span> </td>
+</tr>
+<tr>
+<td  colspan="4" class="text-right">Total: <span id="cart_total"> {{object.total}}</span> </td>
+</tr>
+<tr>
+<td  colspan="4" class="text-right"><a class="btn btn-lg btn-warning" href='{% url "checkout" %}'>Checkout</a></td>
+</tr>
+
+</table>
+</div>
+{% endif %}
+{% endblock %}

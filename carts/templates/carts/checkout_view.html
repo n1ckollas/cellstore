@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+{% load i18n %}
+
+
+
+
+<script type="text/javascript">
+{% block jq %}
+
+// We generated a client token for you so you can test out this code
+// immediately. In a production-ready integration, you will need to
+// generate a client token on your server (see section below).
+var clientToken = "{{client_token}}";
+
+braintree.setup(clientToken, "dropin", {
+  container: "payment-form"
+});    
+
+
+{% endblock jq %}
+</script>
+
+
+
+
+{% block content %}
+
+{% if not user_can_continue%}
+<div class="col-sm-6">
+<p class="lead">Continue as Guest</p>
+<form method="POST" action=''>
+		{% csrf_token %}
+		{{form|crispy}}
+		<input type="submit" class="btn btn-success" value = "Continue as Guest"/> 
+</form>
+</div>
+<div class="col-sm-6">
+	<p class="lead">Login to Continue</p>
+	<form method="POST" action='{% url "auth_login" %}'>
+		{% csrf_token %}
+		{{login_form|crispy}}
+		<input type = "hidden" name='next' value='{{next_url}}'/>
+		<input type="submit" class="btn btn-success" value = "login"/> 
+	</form>
+	<p class="text-center">
+	<p>{% trans "Forgot password" %}? <a href="{% url 'auth_password_reset' %}">{% trans "Reset it" %}</a>!</p>
+	<p>{% trans "Not member" %}? <a href="{% url 'registration_register' %}">{% trans "Register" %}</a>!</p>
+	</p>
+</div>
+{% else %}
+<div class="col-sm-4 col-sm-offset-4 text-center">
+<p class="lead">
+Order Summary:
+</p>
+
+<table class="table">
+<tr>
+<td>{{order.cart.cartitem_set.count}}Items: {%for i in order.cart.cartitem_set.all%}
+<b>{{i.item.get_title}}</b>
+{% endfor %}
+</tr></td>
+<tr>
+<td>Cart Subtotal: {{order.cart.subtotal}}</td>
+</tr>
+<tr>
+<td>Tax: {{order.cart.tax_total}}</td>
+</tr>
+<tr>
+<td>Items Total: {{order.cart.total}}</td>
+</tr>
+<tr>
+<td>Shipping: {{order.shipping_total_price}}</td>
+</tr>
+<tr>
+<td>Order Total: {{order.total}}</td>
+</tr>
+
+</table>
+</div>
+<div class="col-sm-4 col-sm-offset-4 text-center">
+<p>
+<p class="lead"><b>Billing to:</b></p>
+<br>
+{{order.billing_address.get_address}}
+</p>
+<p>
+<p class="lead"><b>Shipping to:</b></p>
+<br>
+{{order.shipping_address.get_address}}
+</p>
+<form id="checkout" method="POST" action='{% url "checkout_final" %}'>
+	{% csrf_token %}
+	<div id="payment-form"></div>
+	<button class='btn btn-lg btn-success' type='submit'>Complete the order</button>
+</form>
+</div>
+{% endif %}
+{% endblock content %}
