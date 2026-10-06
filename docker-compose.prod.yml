@@ -1,0 +1,37 @@
+services:
+
+  nginx:
+
+    build:
+      context: .
+      dockerfile: ./compose/prod/nginx/Dockerfile
+
+    image: cell_store_nginx
+    volumes:
+      - staticfiles:/cell_store/staticfiles
+      - mediafiles:/cell_store/mediafiles
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - web
+
+
+  web:
+    build:
+      context: .
+      dockerfile: ./compose/prod/django/Dockerfile
+    command: /start
+    image: cell_store_web
+    ports:
+      - 8000:8000
+    volumes:
+      - .:/cell_store/
+      - staticfiles:/market/staticfiles
+      - mediafiles:/market/mediafiles
+    env_file:
+      - ./.environment/.prod
+
+volumes:
+  staticfiles:
+  mediafiles:

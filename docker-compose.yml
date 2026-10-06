@@ -1,0 +1,26 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: ./compose/local/Dockerfile
+    image: cell_store
+    # '/start' is the shell script used to run the service
+    command: ./compose/local/start.sh
+    # this volume is used to map the files and folders on the host to the container
+    # so if we change code on the host, code in the docker container will also be changed
+    volumes:
+      - .:/cell_store/
+      - staticfiles:/cell_store/staticfiles
+      - mediafiles:/cell_store/mediafiles
+    ports:
+      - 8010:8000
+    # env_file is used to manage the env variables of our project
+    # env_file:
+      # - ./.environment/.dev
+    restart: always
+
+
+
+volumes:
+  staticfiles:
+  mediafiles:
