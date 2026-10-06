@@ -28,7 +28,7 @@ if not settings.DEBUG:
     # SECURITY WARNING: don't run with debug turned on in production!
     DEBUG = False
 
-    ALLOWED_HOSTS = ['www.djangocellstore.club', 'djangopythoncellstore.club']
+    ALLOWED_HOSTS = ['*']
 
     EMAIL_HOST = 'SMTP.GMAIL.COM'
     EMAIL_HOST_USER = 'nick.rebez@gmail.com'
@@ -136,8 +136,8 @@ if not settings.DEBUG:
 
     STATIC_URL = '/static/'
 
-    STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_in_env", "static_root")
-        
+    # STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_in_env", "static_root")
+    STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')   
     STATICFILES_DIRS = (
         os.path.join(BASE_DIR, "static_in_pro", "our_static"),
         #os.path.join(BASE_DIR, "static_in_env"),
@@ -145,7 +145,8 @@ if not settings.DEBUG:
     )
 
     MEDIA_URL = '/media/'
-    MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_in_env", "media_root")
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
+    # MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static_in_env", "media_root")
 
 
 
