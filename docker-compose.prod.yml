@@ -1,11 +1,7 @@
 services:
 
   nginx:
-
-    build:
-      context: .
-      dockerfile: ./compose/prod/nginx/Dockerfile
-
+    build: ./compose/prod/nginx
     image: cell_store_nginx
     volumes:
       - staticfiles:/cell_store/staticfiles
