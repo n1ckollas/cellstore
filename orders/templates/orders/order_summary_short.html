@@ -1,38 +1,49 @@
-Order Summary:
-</p>
+<h2 class="text-center">
+    Order Summary:
+</h2>
+<div class="container">
+    <div class="row">
+        <div class="col-12 col-md-2 text-center"></div>
+        <div class="col-12 col-md-8 text-center">
+            <table class="table">
+                <tr>
+                <td>{{order.cart.cartitem_set.count}} Items: {%for i in order.cart.cartitem_set.all%}
+                <b>{{i.item.get_title}}</b>
+                {% endfor %}
+                </tr></td>
+                <tr>
+                <td>Cart Subtotal: {{order.cart.subtotal}}</td>
+                </tr>
+                <tr>
+                <td>Tax: {{order.cart.tax_total}}</td>
+                </tr>
+                <tr>
+                <td>Items Total: {{order.cart.total}}</td>
+                </tr>
+                <tr>
+                <td>Shipping: {{order.shipping_total_price}}</td>
+                </tr>
+                <tr>
+                <td>Order Total: {{order.order_total}}</td>
+                </tr>
+            </table>
+        </div>
+        <div class="col-12 col-md-2 text-center"></div>
+    </div>
 
-<table class="table">
-<tr>
-<td>{{order.cart.cartitem_set.count}} Items: {%for i in order.cart.cartitem_set.all%}
-<b>{{i.item.get_title}}</b>
-{% endfor %}
-</tr></td>
-<tr>
-<td>Cart Subtotal: {{order.cart.subtotal}}</td>
-</tr>
-<tr>
-<td>Tax: {{order.cart.tax_total}}</td>
-</tr>
-<tr>
-<td>Items Total: {{order.cart.total}}</td>
-</tr>
-<tr>
-<td>Shipping: {{order.shipping_total_price}}</td>
-</tr>
-<tr>
-<td>Order Total: {{order.order_total}}</td>
-</tr>
-
-</table>
 </div>
-<div class="col-sm-4 col-sm-offset-4 text-center">
-<p>
-<p class="lead"><b>Billing to:</b></p>
-<br>
-{{order.billing_address.get_address}}
-</p>
-<p>
-<p class="lead"><b>Shipping to:</b></p>
-<br>
-{{order.shipping_address.get_address}}
-</p>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12 col-md-6 text-center">
+        <p class="lead"><b>Billing to:</b></p>
+            {{order.billing_address.get_address}}
+        </p>
+    </div>
+    <div class="col-12 col-md-6 text-center">
+        <p class="lead"><b>Shipping to:</b></p>
+            {{order.shipping_address.get_address}}
+        </p>
+    </div>
+  </div>
+</div>
