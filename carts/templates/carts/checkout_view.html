@@ -11,12 +11,45 @@
 // We generated a client token for you so you can test out this code
 // immediately. In a production-ready integration, you will need to
 // generate a client token on your server (see section below).
+// var clientToken = "{{client_token}}";
+
+// braintree.setup(clientToken, "dropin", {
+//   container: "payment-form"
+// });    
+
+
+
 var clientToken = "{{client_token}}";
+braintree.dropin.create({
+  authorization: clientToken,
+  container: '#payment-form'
+}, function (createErr, instance) {
+  if (createErr) {
+    console.error('Error creating Drop-in:', createErr);
+    return;
+  }
 
-braintree.setup(clientToken, "dropin", {
-  container: "payment-form"
-});    
+  // Listen for the form submission
+  var form = document.querySelector('#checkout');
+  form.addEventListener('submit', function (event) {
+    event.preventDefault(); // Prevent the default form submit
 
+    // Request the payment method nonce
+    instance.requestPaymentMethod(function (err, payload) {
+      if (err) {
+        console.error('Error requesting payment method:', err);
+        return;
+      }
+
+      // payload.nonce contains your payment method nonce
+      var nonce = payload.nonce;
+
+      // Now you can set this nonce in a hidden input and submit the form
+      document.querySelector('#nonce').value = nonce;
+      form.submit(); // Submit the form to your server
+    });
+  });
+});
 
 {% endblock jq %}
 </script>
@@ -91,6 +124,7 @@ Order Summary:
 </p>
 <form id="checkout" method="POST" action='{% url "checkout_final" %}'>
 	{% csrf_token %}
+	<input type="hidden" id="nonce" name="payment-info" value="">
 	<div id="payment-form"></div>
 	<button class='btn btn-lg btn-success' type='submit'>Complete the order</button>
 </form>

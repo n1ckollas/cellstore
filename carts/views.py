@@ -9,7 +9,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic.base import View
 from django.views.generic.detail import SingleObjectMixin, DetailView
 from django.views.generic.edit import FormMixin
-
+from ecm.settings import BRAINTREE_PUBLIC, BRAINTREE_PRIVATE, BRAINTREE_MERCHANT_ID
 # Create your views here.
 
 from orders.forms import GuestCheckoutForm
@@ -21,13 +21,16 @@ from products.models import Variation
 
 from .models import Cart, CartItem
 
+
+
 import braintree
 braintree.Configuration.configure(
     braintree.Environment.Sandbox,
-    '*********',
-    '*********',
-    '*********'
+    BRAINTREE_MERCHANT_ID,
+    BRAINTREE_PUBLIC,
+    BRAINTREE_PRIVATE
 )
+
 
 
 
@@ -225,7 +228,7 @@ class CheckoutFinalView(CartOrderMixin, View):
 	def post(self, request, *args, **kwargs):
 		order = self.get_order()
 		order_total = order.order_total
-		nonce = request.POST.get("payment_method_nonce")
+		nonce = request.POST.get("payment-info")
 		if nonce:
 			result = braintree.Transaction.sale({
 			    "amount": order_total,

@@ -3,16 +3,16 @@ from django.conf import settings
 from django.db import models
 # Create your models here.
 from django.core.urlresolvers import reverse
-
+from ecm.settings import BRAINTREE_PUBLIC, BRAINTREE_PRIVATE, BRAINTREE_MERCHANT_ID
 
 from django.db.models.signals import post_save
 
 import braintree
 braintree.Configuration.configure(
     braintree.Environment.Sandbox,
-    '****',
-    '****',
-    '****'
+    BRAINTREE_MERCHANT_ID,
+    BRAINTREE_PUBLIC,
+    BRAINTREE_PRIVATE
 )
 
 class UserCheckout(models.Model):
