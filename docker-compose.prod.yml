@@ -30,7 +30,7 @@ services:
       - staticfiles:/market/staticfiles
       - mediafiles:/market/mediafiles
     env_file:
-      - ./.environment/.prod
+      - ./environment/.prod
 
 volumes:
   staticfiles:
