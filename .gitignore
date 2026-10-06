@@ -3,3 +3,4 @@ environment/*
 
 #compiled files
 *.pyc
+*.DS_store
