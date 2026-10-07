@@ -16,7 +16,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/prod/django/Dockerfile
-    command: ./compose/local/start.sh
+    command: ./compose/prod/start.sh
     image: cell_store_web
     ports:
       - 8000:8000
@@ -26,6 +26,8 @@ services:
       - mediafiles:/cell_store/mediafiles
     env_file:
       - ./environment/.prod
+    restart:
+      always
 
 volumes:
   staticfiles:

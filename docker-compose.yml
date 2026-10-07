@@ -13,8 +13,7 @@ services:
       - staticfiles:/cell_store/staticfiles
       - mediafiles:/cell_store/mediafiles
     ports:
-      - 8010:8000
-    # env_file is used to manage the env variables of our project
+      - 8000:8000
     env_file:
       - ./environment/.dev
     restart: always
