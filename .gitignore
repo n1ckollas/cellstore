@@ -1,6 +1,9 @@
-#Environment Setup
+# Environment Setup
 environment/*
 
-#compiled files
+# Compiled files
 *.pyc
 *.DS_store
+
+# DB files
+db.sqlite3
