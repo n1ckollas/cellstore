@@ -23,8 +23,8 @@ services:
       - 8000:8000
     volumes:
       - .:/cell_store/
-      - staticfiles:/market/staticfiles
-      - mediafiles:/market/mediafiles
+      - staticfiles:/cell_store/staticfiles
+      - mediafiles:/cell_store/mediafiles
     env_file:
       - ./environment/.prod
 
