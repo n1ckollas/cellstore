@@ -7,7 +7,6 @@ services:
       - staticfiles:/cell_store/staticfiles
       - mediafiles:/cell_store/mediafiles
     ports:
-      - 80:80
       - 443:443
     depends_on:
       - web
