@@ -16,7 +16,7 @@ services:
     build:
       context: .
       dockerfile: ./compose/prod/django/Dockerfile
-    command: ./compose/prod/start.sh
+    command: ./compose/prod/django/start.sh
     image: cell_store_web
     ports:
       - 8000:8000
