@@ -23,9 +23,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'zgt93m=ee1vv+zeg=%hge*pxsnoy-o&du$*-2n@bg57)(+oqdx'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+DEBUG = os.environ.get("DEBUG", False)
+
+ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", 
+    ["www.vintagecell.co", "vintagecell.co"]).split(",")
+
 
 
 # Application definition
