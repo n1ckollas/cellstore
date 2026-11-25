@@ -71,7 +71,9 @@ $('#submit-btn').click(function(event) {
 	      	</ul>
       	</div>				
 			{% endif %}
-			<p class="description">{{ object.description }}</p>
+		<div class="description">
+			{{ object.description|safe }}
+		</div>
 		</div>
 		<div class="col-sm-4">
 			{% if object.variation_set.count > 0 %}
