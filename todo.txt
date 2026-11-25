@@ -2,4 +2,3 @@
     and height of a viewport accross all the images.
 
 - Footer Django Cell store Ranaim to vintage Cell.
-- Product description should save Html, and should return readable html in a page.
