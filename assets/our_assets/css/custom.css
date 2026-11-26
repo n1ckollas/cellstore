@@ -1,4 +1,16 @@
 {% load staticfiles %}
+
+.row-flex {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+/* Optional: Make inner panels/cards stretch to full height */
+.row-flex > [class*='col-'] {
+  display: flex;
+  flex-direction: column;
+}
+
 .jumbotron {
   background-position-y : -225px;
 }

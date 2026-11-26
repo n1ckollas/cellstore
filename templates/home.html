@@ -84,6 +84,8 @@
 	</div>
 	<div class="row">
 		<h1>Featured Products</h1>
-	{% include "products/products.html" with object_list=products2 %}
+		<div class="row-flex">
+			{% include "products/products.html" with object_list=products2 %}
+		</div>
 	</div>
 {% endblock %}
