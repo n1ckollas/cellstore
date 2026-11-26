@@ -6,4 +6,4 @@ environment/*
 *.DS_store
 
 # DB files
-db.sqlite3
+*.sqlite3
