@@ -6,6 +6,8 @@
 			<a href="{% url 'categories' %}">  Categories</a>
 		</small>
 	</h1>
-	{% include "products/products.html" with object_list=object_list %}
+	<div class="row-flex">
+		{% include "products/products.html" with object_list=object_list %}
+	</div>
 {% endblock %}
 
