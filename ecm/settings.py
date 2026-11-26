@@ -151,6 +151,7 @@ REGISTRATION_AUTO_LOGIN = True
 SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
 
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
 
 BRAINTREE_PUBLIC    = os.environ.get("BRAINTREE_PUBLIC", None)
 BRAINTREE_PRIVATE   = os.environ.get("BRAINTREE_PRIVATE", None)
